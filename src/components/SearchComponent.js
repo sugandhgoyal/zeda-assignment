@@ -80,7 +80,7 @@ const SearchComponent = props => {
       setSearchString(props.history.location.search.replace("?q=", ""));
       searchFunc(props.history.location.search.replace("?q=", ""));
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const searchMovies = searchString => {
     fetch(`http://www.omdbapi.com/?apikey=7a00f7df&s=${searchString}`)
