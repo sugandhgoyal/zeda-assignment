@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme =>
       margin: 20
     },
     title: {
-        marginTop: 0
+      marginTop: 0
     },
     img: {
       height: 310,
@@ -49,7 +49,7 @@ export default function MoviePage(props) {
     <div className={classes.moviePage}>
       {movieData && (
         <>
-          <img src={movieData.Poster} className={classes.img} />
+          <img src={movieData.Poster} className={classes.img} alt="poster" />
           <div className={classes.content}>
             <h2 className={classes.title}>{movieData.Title}</h2>
             <div>

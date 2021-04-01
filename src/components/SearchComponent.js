@@ -65,8 +65,8 @@ const SearchComponent = props => {
           `?${key}=${keyValue}`;
         window.history.pushState({ path: newurl }, "", newurl);
       }
-
-      searchMovies();
+      console.log("value", value);
+      searchMovies(value);
     } else if (!value || (value && value.length < 2)) searchMovies([]);
   };
 
@@ -77,10 +77,11 @@ const SearchComponent = props => {
 
   useEffect(() => {
     if (props.history) {
+      console.log("value", props.history.location.search.replace("?q=", ""));
       setSearchString(props.history.location.search.replace("?q=", ""));
       searchFunc(props.history.location.search.replace("?q=", ""));
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const searchMovies = searchString => {
     fetch(`http://www.omdbapi.com/?apikey=7a00f7df&s=${searchString}`)
