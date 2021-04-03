@@ -46,6 +46,7 @@ const useStyles = makeStyles(theme =>
 const SearchComponent = props => {
   const [searchString, setSearchString] = useState("");
   const [movies, setMovies] = useState([]);
+  const [error, setError] = useState("");
 
   const classes = useStyles();
 
@@ -53,7 +54,6 @@ const SearchComponent = props => {
     let key = encodeURIComponent("q");
     let keyValue = encodeURIComponent(value);
 
-    console.log("value", value);
     setSearchString(value);
     if (value && value.length > 2) {
       if (props.history && props.history) {
@@ -65,7 +65,6 @@ const SearchComponent = props => {
           `?${key}=${keyValue}`;
         window.history.pushState({ path: newurl }, "", newurl);
       }
-      console.log("value", value);
       searchMovies(value);
     } else if (!value || (value && value.length < 2)) searchMovies([]);
   };
@@ -77,17 +76,18 @@ const SearchComponent = props => {
 
   useEffect(() => {
     if (props.history) {
-      console.log("value", props.history.location.search.replace("?q=", ""));
       setSearchString(props.history.location.search.replace("?q=", ""));
       searchFunc(props.history.location.search.replace("?q=", ""));
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const searchMovies = searchString => {
-    fetch(`http://www.omdbapi.com/?apikey=7a00f7df&s=${searchString}`)
+    fetch(`https://www.omdbapi.com/?apikey=7a00f7df&s=${searchString}`)
       .then(response => response.json())
       .then(data => {
-        setMovies(data.Search);
+        if (data && data.Error) {
+          setError(data && data.Error);
+        } else setMovies(data.Search);
       });
   };
 
@@ -102,6 +102,7 @@ const SearchComponent = props => {
         variant="outlined"
         className={classes.textfield}
       />
+      {error && !movies && <div>{error}</div>}
       <Grid container className={classes.root} spacing={2}>
         {movies &&
           movies.length > 0 &&
